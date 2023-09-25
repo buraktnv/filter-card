@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="assets/js/helpers/APIFetcher.js" type="module"></script>
+    <script src="assets/js/helpers/HTMLAdder.js" type="module"></script>
+    <script src="assets/js/helpers/Inits.js" type="module"></script>
+    <script src="assets/js/index.js" type="module"></script>
+  </head>
+  <body>
+    <div class="news-list-page">
+      <div class="filter-list">
+        <input
+          type="search"
+          class="search-bar"
+          placeholder="Search a new..."
+          id="new-search"
+          name="search-bar"
+        />
+        <select
+          class="filter-news-site"
+          name="filter-news-site"
+          id="filter-news-site"
+        >
+          <option value="">Select Website</option>
+        </select>
+      </div>
+      <ul id="news-list" class="news-list"></ul>
+    </div>
+  </body>
+</html>
