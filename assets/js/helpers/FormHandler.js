@@ -5,37 +5,15 @@ export class FormHandler {
     this.checkboxData = {};
     this.handleCheckboxes();
     this.onChangeConsoleLog();
-  }
-
-  areAllFieldsEmpty() {
-    const inputs = this.form.querySelectorAll("input");
-    let allEmpty = true;
-
-    inputs.forEach((input) => {
-      if (input.type !== "checkbox") {
-        if (input.value.trim() !== "") {
-          allEmpty = false;
-        }
-      } else {
-        if (input.checked) {
-          allEmpty = false;
-        }
-      }
-    });
-
-    return allEmpty;
+    this.updateSubmitButtonState();
   }
 
   handleCheckboxes() {
     const checkboxes = this.form.querySelectorAll("input[type=checkbox]");
-
-    /* Event Delegation */
     checkboxes.forEach((checkbox) => {
       checkbox.addEventListener("change", (event) => {
         const { name, value, checked } = event.target;
 
-        // If the checkbox is checked, add its value to the array
-        // If it's unchecked, remove its value from the array
         if (checked) {
           if (!this.checkboxData[name]) {
             this.checkboxData[name] = [];
@@ -47,17 +25,13 @@ export class FormHandler {
             this.checkboxData[name].splice(valueIndex, 1);
           }
         }
+        this.updateSubmitButtonState();
       });
     });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-
-    if (this.areAllFieldsEmpty()) {
-      console.error("All fields are empty");
-      return;
-    }
 
     const formData = new FormData(this.form);
     const formDataObject = Object.fromEntries(formData);
@@ -71,7 +45,6 @@ export class FormHandler {
     this.checkboxData = {};
   }
 
-  /* Development */
   logFormData() {
     const formData = new FormData(this.form);
     const formDataObject = Object.fromEntries(formData);
@@ -89,8 +62,28 @@ export class FormHandler {
         console.log(
           `Something Changed in ${event.target.name}, ${event.target.value}`
         );
+        this.updateSubmitButtonState();
         this.logFormData();
       });
     });
+  }
+
+  updateSubmitButtonState() {
+    const submitButton = this.form.querySelector("button[type=submit]");
+    const checkboxGroups = this.form.querySelectorAll(
+      ".filter-card__input-group"
+    );
+    const locationInput = this.form.querySelector(".input.-location");
+
+    const allGroupsChecked = Array.from(checkboxGroups).every((group) => {
+      const checkboxes = group.querySelectorAll("input[type=checkbox]");
+      return Array.from(checkboxes).some((checkbox) => checkbox.checked);
+    });
+
+    if (!allGroupsChecked || locationInput.value.trim() === "") {
+      submitButton.disabled = true;
+    } else {
+      submitButton.disabled = false;
+    }
   }
 }
